@@ -6,7 +6,7 @@ const USERNAME = process.env.NAMECOM_USERNAME;
 const TOKEN = process.env.NAMECOM_API_TOKEN;
 
 // ⚙️ Settings
-const EXTENSION = ".xyz";
+const EXTENSION = ".com";
 const DELAY_MS = 1000;
 
 const MAX_RUNTIME_MS = 5.5 * 60 * 60 * 1000;
