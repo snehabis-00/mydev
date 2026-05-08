@@ -1,0 +1,36 @@
+name: mydev
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 */6 * * *"   # runs every 6 hours
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run script
+        run: node script.js
+        env:
+          NAMECOM_USERNAME: ${{ secrets.NAMECOM_USERNAME }}
+          NAMECOM_API_TOKEN: ${{ secrets.NAMECOM_API_TOKEN }}
+
+      - name: Save results
+        run: |
+          git config --global user.name "bot"
+          git config --global user.email "bot@github.com"
+          git add .
+          git commit -m "update progress" || echo "no changes"
+          git push
