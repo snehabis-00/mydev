@@ -150,6 +150,7 @@
 // }
 
 // main();
+
 const fs = require("fs");
 const axios = require("axios");
 
@@ -171,7 +172,9 @@ const WORDS_FILES = [
 ];
 
 // 📄 Output files
-const OUTPUT_FILE = `available-${EXTENSION.replace(".", "")}.txt`;
+const OUTPUT_FILE =
+  `available-${EXTENSION.replace(".", "")}.txt`;
+
 const PROGRESS_FILE = "progress.txt";
 
 const startTime = Date.now();
@@ -193,6 +196,7 @@ function loadProgress() {
 
 // 💾 Save progress
 function saveProgress(index) {
+
   fs.writeFileSync(
     PROGRESS_FILE,
     String(index)
@@ -255,6 +259,7 @@ function saveAvailable(domains) {
 
 // ⏳ Delay
 function sleep(ms) {
+
   return new Promise(resolve =>
     setTimeout(resolve, ms)
   );
@@ -287,7 +292,10 @@ function loadWords() {
       `${file}: ${fileWords.length} words`
     );
 
-    words.push(...fileWords);
+    // ✅ Safe append
+    for (const word of fileWords) {
+      words.push(word);
+    }
   }
 
   return words;
@@ -306,7 +314,10 @@ async function main() {
 
   const startIndex = loadProgress();
 
-  console.log(`Loaded ${words.length} words`);
+  console.log(
+    `Loaded ${words.length} words`
+  );
+
   console.log(
     `Resuming from index ${startIndex}`
   );
@@ -328,11 +339,13 @@ async function main() {
       )}`
     );
 
-    const results = await checkBatch(batch);
+    const results =
+      await checkBatch(batch);
 
     const available = results
       .filter(r =>
-        r.purchasable && !r.premium
+        r.purchasable &&
+        !r.premium
       )
       .map(r =>
         r.domainName.replace(
@@ -369,7 +382,9 @@ async function main() {
     }
   }
 
-  console.log("All words processed 🎉");
+  console.log(
+    "All words processed 🎉"
+  );
 
   // 🔄 Reset progress
   saveProgress(0);
